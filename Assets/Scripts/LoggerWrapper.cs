@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoggerWrapper : MonoBehaviour
 {
-    private const KeyCode StartLinq = KeyCode.Z;
+    private const KeyCode LogKey = KeyCode.Z;
 
     private UnityLogger _logger = new();
 
@@ -12,8 +12,12 @@ public class LoggerWrapper : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(StartLinq))
-        {
+        if (Input.GetKeyDown(LogKey))
+            LogCollections();
+    }
+
+    private void LogCollections()
+    {
             List<string> stringsList = new() { "str", "stringtwo", "stringthree" };
             string[] stringsArray = new[] { "strarr", "stringarrtwo" };
 
@@ -22,6 +26,5 @@ public class LoggerWrapper : MonoBehaviour
             _logger.LogCollection(stringsList);
             _logger.LogCollection(stringsArray);
             _logger.LogCollection(onlyUpperCase);
-        }
     }
 }
