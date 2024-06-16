@@ -1,30 +1,71 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class LoggerWrapper : MonoBehaviour
 {
-    private const KeyCode LogKey = KeyCode.Z;
+    private bool _isParsed;
+    private UnityLogger _logger;
+    private Parser _parser;
 
-    private UnityLogger _logger = new();
+    private int[] _randomNumbers;
+    
+    private void OnEnable() => 
+        _parser.ParsingStateChanged += LogSwitchedState;
 
-    public UnityLogger Logger => _logger;
+    private void Awake() =>
+        Init();
+
+    private void OnDisable() =>
+        _parser.ParsingStateChanged -= LogSwitchedState;
 
     private void Update()
     {
-        if (Input.GetKeyDown(LogKey))
-            LogCollections();
+        if (Input.GetKeyDown(LogKeyCodes.IEnumerable))
+            _logger.LogCollections();
+
+        if (Input.GetKeyDown(LogKeyCodes.MoreThanTen))
+            _logger.LogNumbersMoreThanTen(_randomNumbers);
+
+        if (Input.GetKeyDown(LogKeyCodes.HasFiveDivisible))
+            print(HasFiveDivisible());
+
+        if (Input.GetKeyDown(LogKeyCodes.AreAllPositive))
+            print(AreAllPositive());
+
+        if (Input.GetKeyDown(LogKeyCodes.ParseToList))
+            Parse();
     }
 
-    private void LogCollections()
+    private bool HasFiveDivisible() => 
+        _randomNumbers.Any(n => n % 5 == 0);
+
+    private bool AreAllPositive() =>
+        _randomNumbers.All(n => n > 0);
+
+    private void Parse()
     {
-            List<string> stringsList = new() { "str", "stringtwo", "stringthree" };
-            string[] stringsArray = new[] { "strarr", "stringarrtwo" };
+        if (_isParsed == false)
+            _parser.ParseToList(_randomNumbers);
+        else
+            _parser.Unparse(_randomNumbers);
+    }
 
-            IEnumerable<string> onlyUpperCase = stringsList.Where(str => str.All(ch => char.IsUpper(ch))); // выбираем те строки, где символы в uppercase
+    private void LogSwitchedState()
+    {
+        _isParsed = !_isParsed;
+        print(_isParsed);
+    }
 
-            _logger.LogCollection(stringsList);
-            _logger.LogCollection(stringsArray);
-            _logger.LogCollection(onlyUpperCase);
+    private void Init()
+    {
+        _isParsed = false;
+
+        _logger = new();
+        _parser = new();
+
+        _randomNumbers = new int[100];
+
+        for (int i = 0; i < _randomNumbers.Length; i++)
+            _randomNumbers[i] = Tools.GetRandomNumber(_randomNumbers.Length + 1);
     }
 }
