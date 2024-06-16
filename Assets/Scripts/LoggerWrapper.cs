@@ -10,13 +10,13 @@ public class LoggerWrapper : MonoBehaviour
     private int[] _randomNumbers;
     
     private void OnEnable() => 
-        _parser.ParsingStateChanged += LogSwitchedState;
+        _parser.ParsingStateChanged += OnSwitchedStateLog;
 
     private void Awake() =>
         Init();
 
     private void OnDisable() =>
-        _parser.ParsingStateChanged -= LogSwitchedState;
+        _parser.ParsingStateChanged -= OnSwitchedStateLog;
 
     private void Update()
     {
@@ -50,7 +50,7 @@ public class LoggerWrapper : MonoBehaviour
             _parser.Unparse(_randomNumbers);
     }
 
-    private void LogSwitchedState()
+    private void OnSwitchedStateLog()
     {
         _isParsed = !_isParsed;
         print(_isParsed);
