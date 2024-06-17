@@ -6,15 +6,15 @@ public class Parser
 {
     public event Action ParsingStateChanged;
 
-    public void ParseToList(int[] randomNumbers)
+    public List<int> ParseToList(int[] randomNumbers)
     {
-        randomNumbers.ToList();
         ParsingStateChanged?.Invoke();
+        return randomNumbers.ToList();
     }
 
-    public void Unparse(IEnumerable<int> randomNumbers)
+    public int[] Unparse(IEnumerable<int> randomNumbers)
     {
-        randomNumbers.ToArray();
         ParsingStateChanged?.Invoke();
+        return randomNumbers.ToArray();
     }
 }

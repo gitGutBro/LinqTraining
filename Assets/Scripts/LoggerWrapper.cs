@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class LoggerWrapper : MonoBehaviour
     private Parser _parser;
 
     private int[] _randomNumbers;
+    IEnumerable<int> _parsingResult;
     
     private void OnEnable() => 
         _parser.ParsingStateChanged += OnSwitchedStateLog;
@@ -33,7 +35,10 @@ public class LoggerWrapper : MonoBehaviour
             print(AreAllPositive());
 
         if (Input.GetKeyDown(LogKeyCodes.ParseToList))
-            Parse();
+        {
+            _parsingResult = Parse();
+            Debug.Log(_parsingResult);
+        }
     }
 
     private bool HasFiveDivisible() => 
@@ -42,12 +47,12 @@ public class LoggerWrapper : MonoBehaviour
     private bool AreAllPositive() =>
         _randomNumbers.All(n => n > 0);
 
-    private void Parse()
+    private IEnumerable<int> Parse()
     {
         if (_isParsed == false)
-            _parser.ParseToList(_randomNumbers);
+             return _parser.ParseToList(_randomNumbers);
         else
-            _parser.Unparse(_randomNumbers);
+            return _parser.Unparse(_randomNumbers);
     }
 
     private void OnSwitchedStateLog()
