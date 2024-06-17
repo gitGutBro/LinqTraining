@@ -28,12 +28,12 @@ public class UnityLogger
         LogCollection(onlyUpperCase);
     }
 
-    public void LogCollection(IEnumerable strs)
+    public void LogCollection(IEnumerable objs)
     {
-        foreach (var str in strs)
-            Log(str);
+        foreach (object obj in objs)
+            Log(obj);
     }
 
-    private void Log<T>(T message) => 
+    private void Log(object message) => 
         Debug.Log(message);
 }
